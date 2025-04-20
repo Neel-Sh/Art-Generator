@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Timeforms Replica</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+/*  Reset & root tokens  */
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+:root{
+  --radius:18px;
+  --panel-bg:hsla(0,0%,100%,0.6);
+  --panel-blur:20px;
+  --brand:#111;
+  --accent:#000;
+  --shadow:0 4px 20px rgba(0,0,0,.15);
+}
+
+body{
+  background:#0d1117;
+  color:#f5f5f5;
+}
+
+.panel{
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(25px) saturate(150%);
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.card{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:var(--radius);
+  padding:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.9rem;
+}
+.card section{
+  display:flex;
+  flex-direction:column;
+  gap:.35rem;
+}
+
+.card-heading{
+  font-size:.9rem;
+  font-weight:600;
+  color:#fff;
+  margin-bottom:.4rem;
+}
+
+label.heading{font-size:.75rem;font-weight:500;color:#ddd;margin-bottom:.25rem;display:block}
+
+/*  Layout  */
+.timeforms{display:flex;gap:4rem;align-items:flex-start;justify-content:center;padding:4rem 2rem}
+.panel{width:260px;padding:1.5rem;display:flex;flex-direction:column;gap:1.75rem;}
+
+/*  Headings  */
+.heading{font-size:.85rem;font-weight:600;color:var(--brand);margin-bottom:.5rem}
+
+/*  Segmented control  */
+.segmented{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #ddd;border-radius:var(--radius);overflow:hidden}
+.segmented input{display:none}
+.segmented label{padding:.55rem 0;text-align:center;font-size:.75rem;cursor:pointer;transition:background .2s}
+.segmented input:checked+label{background:#fff;font-weight:600}
+
+/*  Weather only 3‑wide inside stepping grid  */
+.weather{grid-template-columns:repeat(3,1fr)}
+
+/*  Range slider  */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  outline: none;
+  margin: .25rem 0 1rem;
+  backdrop-filter: blur(10px);
+}
+
+/* WebKit Thumb */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25), inset 0 0 4px rgba(255,255,255,0.6);
+  cursor: pointer;
+  margin-top: -6px; /* center thumb vertically */
+  backdrop-filter: blur(10px);
+}
+
+/* Mozilla track */
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Mozilla thumb */
+input[type=range]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25), inset 0 0 4px rgba(255,255,255,0.6);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+/* IE track */
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 6px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+}
+input[type=range]::-ms-fill-upper {
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+}
+input[type=range]::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  border: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25), inset 0 0 4px rgba(255,255,255,0.6);
+  cursor: pointer;
+  margin-top: 0; /* IE aligns differently */
+  backdrop-filter: blur(10px);
+}
+
+.time-readout{font-size:.8rem;text-align:left;color:#666}
+
+/* Buttons */
+button{padding:.45rem .9rem;border:none;border-radius:var(--radius);font-size:.75rem;cursor:pointer;background:#eee;transition:background .2s;background:#22223b;color:#fff;}
+button:active{background:#ddd}
+.btn-row{display:flex;gap:.5rem;margin-top:.75rem}
+.full-width{width:100%;margin-top:.75rem}
+
+/* Toggles (iOS‑style) */
+.toggles{display:flex;align-items:center;gap:.75rem}
+.switch{position:relative;display:inline-block;width:38px;height:22px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:34px;transition:.2s}
+.slider:before{content:"";position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s}
+input:checked+.slider{background:#111}
+input:checked+.slider:before{transform:translateX(16px)}
+
+/*  Artwork frame  */
+.frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: .75rem;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+}
+.frame .art {
+  width: 400px;
+  height: 640px;
+  border: 8px solid #fff;
+  transition: filter .8s;
+}
+
+/* Responsive */
+@media(max-width:900px){
+  .timeforms{flex-direction:column;align-items:center}
+}
+
+button.primary{background:#4e56ff}
+button.primary:active{background:#3d45d1}
+
+/* ===== Modern refinements ===== */
+
+.timeforms{
+  gap:6rem;
+  padding:4rem 3rem;
+}
+
+.panel{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.5rem;
+  width:560px;
+  padding:2rem;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(35px) saturate(160%);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:var(--radius);
+}
+
+.panel > .card{width:100%;}
+.panel > button{grid-column:1/-1}
+@media(max-width:800px){
+  .panel{
+    display:flex;
+    flex-direction:column;
+    width:280px;
+  }
+  .panel > button{grid-column:auto}
+}
+
+.card-heading{
+  font-size:.95rem;
+  font-weight:600;
+  color:#fff;
+  margin-bottom:.6rem;
+  letter-spacing:.02em;
+}
+
+button{
+  font-size:.8rem;
+  font-weight:500;
+  border:none;
+  border-radius:var(--radius);
+  padding:.6rem 1rem;
+  transition:background .2s, transform .15s;
+}
+
+button:hover{transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+
+button.primary{
+  background:#4e56ff;
+}
+button.primary:hover{
+  background:#5d65ff;
+}
+button.primary:active{
+  background:#434bdb;
+}
+
+button:not(.primary){
+  background:#2a2e35;
+}
+  </style>
+</head>
+<body>
+  <main class="timeforms">
+    <aside class="panel">
+      <!-- ---------- COLOR CARD ---------- -->
+      <div class="card">
+        <h3 class="card-heading">Colours</h3>
+        <div class="hue-controls">
+          <button type="button" id="addHueBtn">Add Hue</button>
+          <button type="button" id="removeHueBtn">Remove Hue</button>
+        </div>
+        <div id="huesContainer">
+          <section>
+            <label class="heading">Hue A</label>
+            <input type="range" id="hueA" min="0" max="360" value="0">
+          </section>
+          <section>
+            <label class="heading">Hue B</label>
+            <input type="range" id="hueB" min="0" max="360" value="80">
+          </section>
+          <section>
+            <label class="heading">Hue C</label>
+            <input type="range" id="hueC" min="0" max="360" value="200">
+          </section>
+        </div>
+      </div>
+
+      <!-- ---------- GEOMETRY CARD ---------- -->
+      <div class="card">
+        <h3 class="card-heading">Geometry</h3>
+
+        <section>
+          <label class="heading">Inner Size</label>
+          <input type="range" id="inner" min="20" max="90" value="60">
+        </section>
+
+        <section>
+          <label class="heading">Corner Roundness</label>
+          <input type="range" id="corner" min="0" max="50" value="5">
+        </section>
+      </div>
+
+      <!-- ---------- EFFECTS CARD ---------- -->
+      <div class="card">
+        <h3 class="card-heading">Effects</h3>
+
+        <section>
+          <label class="heading">Edge Softness</label>
+          <input type="range" id="soft" min="0" max="100" value="10">
+        </section>
+
+        <section>
+          <label class="heading">Canvas Blur</label>
+          <input type="range" id="gblur" min="0" max="20" value="0">
+        </section>
+      </div>
+
+      <!-- ---------- INTENSITY CARD ---------- -->
+      <div class="card">
+        <h3 class="card-heading">Intensity</h3>
+        <section>
+          <label class="heading">Saturation</label>
+          <input type="range" id="sat" min="0" max="100" value="80">
+        </section>
+        <section>
+          <label class="heading">Brightness</label>
+          <input type="range" id="val" min="0" max="100" value="100">
+        </section>
+      </div>
+
+      <button id="save" class="full-width primary">Save Image</button>
+      <button id="reset" class="full-width">Reset</button>
+    </aside>
+
+    <!-- Artwork frame -->
+    <figure class="frame">
+      <div id="art" class="art"></div>
+    </figure>
+  </main>
+
+  <script type="module" src="sketch.js"></script>
+</body>
+</html>
