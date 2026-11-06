@@ -1,33 +1,25 @@
-# WallPaperArt 🎨✨
+# Wallpaper Art Generator
 
-A vibe-coded generative art playground built with WebGL, shaders, and pure creative energy.  
-Coded in a few hours on `o4-mini-high` — inspired by the stunning visuals of @nickthomm.
+A browser-based generative-art playground inspired by Nick Thomm. Adjust colors and shape controls in a Three.js/WebGL shader and export a vertical wallpaper.
 
-## What's Inside
-- Real-time generative visuals using `three.js` & GLSL shaders
-- Fully customizable via sliders
-- Clean vertical layout for art-first focus
-- Instant 4K vertical export for wallpapers
+![Generator preview](screenshot.png)
 
-## 🛠 Tech Stack
-- `three.js`
-- WebGL fragment shaders
-- Vanilla JS + HTML/CSS
+## Run locally
 
-## 🚀 Getting Started
-Clone the repo and open `index.html` in your browser:
-```bash
-git clone https://github.com/Neel-Sh/WallPaperArt.git
-cd WallPaperArt
-open index.html
+```sh
+git clone https://github.com/Neel-Sh/Art-Generator.git
+cd Art-Generator
+python3 -m http.server 4173 --bind 127.0.0.1
 ```
 
-## 📸 Screenshot
-![screenshot](./screenshot.png)
+Open [localhost:4173](http://localhost:4173) in a WebGL-capable browser. Serve the folder over HTTP because `sketch.js` is an ES module. Three.js loads from jsDelivr, so startup requires network access to that CDN.
 
-## 🤍 Credits 
-- Coded by [@Neel-Sh](https://github.com/Neel-Sh)
+## Controls and source
 
-## 🔮 Vibe Coding Is the Future
-No plan. No stress. Just sliders, colors, and vibes.  
-Feel free to fork it, remix it, and make it yours.
+- Tune hues, saturation, value, softness, and rounded shape parameters.
+- Use the export control to save the generated wallpaper locally.
+- `index.html` contains the interface, `style.css` its layout, and `sketch.js` the shader and export behavior.
+
+There is no package installation, build pipeline, or server-side rendering. After editing, check slider behavior, resizing, and exported image dimensions in a browser. See [Contributing](CONTRIBUTING.md).
+
+Created by [Neel Sharma](https://github.com/Neel-Sh). The repository does not include a standalone license file.
